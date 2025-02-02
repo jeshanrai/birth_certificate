@@ -1,5 +1,11 @@
-
 <?php
+session_start();
+if (!isset($_SESSION['username'] )) {
+    header("Location: login.php");
+    exit;
+}
+
+
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -124,7 +130,7 @@ $stmt->bind_param(
 
 // **Execute Query**
 if ($stmt->execute()) {
-    // echo "Data inserted successfully!";
+    echo "Data inserted successfully!";
 } else {
     echo "Error: " . $stmt->error;
 }
@@ -152,7 +158,7 @@ body {
   background-color: #f4f4f4;
   padding: 0 2rem;
 }
-  .header {
+.header {
             position: fixed;
             top: 0;
             left: 0;
@@ -194,22 +200,35 @@ body {
             background-color: #004b87;
             border-radius: 5px;
         }
-        .login-btn {
-            background-color: #ffcc00;
-            color: #002147;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            transition: background 0.3s;
-            margin-right:30px;
-        }
-        .login-btn:hover {
-            background-color: #e6b800;
-        }
+
+
+        .user-name {
+    color: white;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.login-btn, .logout-btn {
+    background-color: #ffcc00;
+    color: #333;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-right:30px;
+}
+
+.login-btn:hover, .logout-btn:hover {
+    background-color: #ffaa00;
+}
+
+.login-btn img {
+    width: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+  
         .login-btn img {
             height: 20px;
             margin-right: 8px;
@@ -224,11 +243,7 @@ body {
             margin: 0;
             font-size: 18px;
         }
-        .header .text h2 {
-            margin: 2px 0;
-            font-size: 16px;
-            font-weight: normal;
-        }
+        
         .header .text h3 {
             margin: 0;
             font-size: 14px;
@@ -248,7 +263,7 @@ body {
   max-width: 100%;
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-top:150px
+  margin-top:150px;
 }
 
 .container__Dotted {
@@ -370,8 +385,10 @@ input {
 }
 
 h2 {
-    margin-top: 1rem;
-    /* background-color: #ccc; */
+  margin: 2px 0;
+            font-size: 16px;
+            font-weight: normal;
+            color:black importnat!;
 }
 
 .form-group {
@@ -526,6 +543,14 @@ th {
 .submit-btn:hover {
   background: #0056b3;
 }
+.user-icon {
+    width: 20px; /* Adjust size as needed */
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    filter: brightness(0) invert(1); /* Ensures the icon appears white */
+}
+
 
 /* Responsive Design */
 @media (min-width: 600px) {
@@ -548,12 +573,6 @@ th {
     flex-direction: column;
     align-items: center;
   }
-  .offcial_heading{
-    margin: 2px 0;
-            font-size: 16px;
-            font-weight: normal;
-
-  }
 }
 
       </style>
@@ -563,8 +582,7 @@ th {
         <img src="image/government logo.png" class="government_logo" alt="Nepal Government Logo">
         <div class="text">
             <h1>नेपाल सरकारको आधिकारिक पोर्टल</h1>
-            <h2 class="offcial_heading">The Official Portal of Government of Nepal</h2>
-            <h3>NEPAL.GOV.NP</h3>
+            <h2>The Official Portal of Government of Nepal</h2>
         </div>
         <img class="flag" src="image/flag.gif" alt="Nepal Flag">
     </div>
@@ -576,9 +594,21 @@ th {
             <a href="contact.php">Contact Us</a>
             <a href="certificate.php">Certificate</a>
         </div>
-        <a href="login.php" class="login-btn">
-            <img src="image/login_icon.png" alt="Login Icon"> Log In
-        </a>
+          <div class="login-section">
+        <?php if (isset($_SESSION['username'])): ?>
+          <span class="user-name">
+    <img src="image/user_icon.png" alt="User Icon" class="user-icon">
+    <?php echo htmlspecialchars($_SESSION['username']); ?>
+</span>
+
+            <a href="logout.php" class="logout-btn">Logout</a>
+        <?php else: ?>
+            <a href="login.php" class="login-btn">
+                <img src="image/login_icon.png" alt="Login Icon"> Log In
+            </a>
+        <?php endif; ?>
+    </div>
+</div>
     </div>
     <div class="container">
       <!-- Title -->
@@ -589,7 +619,7 @@ th {
         <!-- Left Section -->
         <div class="section">
           <h3 class="section-title">Local Registrar's Office</h3>
-          <form action="index.php" method="POST">
+          <form action="birth_registration.php" method="POST" id="registrationForm">
           <table>
             <tr>
               <td>Zone</td>
@@ -1268,5 +1298,20 @@ th {
         </div>
       </div>
     </div>
+    <script>
+   let formSubmitted = false; // Track if the form has been submitted
+
+window.addEventListener("beforeunload", function (event) {
+    if (!formSubmitted) {
+        event.preventDefault();
+        event.returnValue = ""; // Required for Chrome
+    }
+});
+
+document.getElementById("registrationForm").addEventListener("submit", function () {
+    formSubmitted = true; // Set to true when the form is submitted
+});
+
+</script>
   </body>
 </html>

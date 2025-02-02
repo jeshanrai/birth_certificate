@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <div class="container">
         <h2>Login</h2>
-        <form action="login.php" method="POST">
+        <form action="birth_registration_login.php" method="POST">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Enter your email" required>
 

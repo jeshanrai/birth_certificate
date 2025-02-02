@@ -233,7 +233,6 @@ $conn->close();
         <div class="text">
             <h1>नेपाल सरकारको आधिकारिक पोर्टल</h1>
             <h2>The Official Portal of Government of Nepal</h2>
-            <h3>NEPAL.GOV.NP</h3>
         </div>
         <img class="flag" src="image/flag.gif" alt="Nepal Flag">
     </div>
