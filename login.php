@@ -9,6 +9,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    // Check if the user is admin
+    if ($email === 'admin@gmail.com' && $password === 'admin123') {
+        $_SESSION['username'] = 'Admin';
+        $_SESSION['email'] = 'admin@gmail.com';
+        $_SESSION['role'] = 'admin'; // Add a role to identify admin
+        
+        header("Location: verifiying.php"); // Redirect to admin page
+        exit();
+    }
+
     // Fetch user from database
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
@@ -20,8 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['username'] = $user['name'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['citizenship_number'] = $user['citizenship_number'];
+        $_SESSION['role'] = 'user'; // Add a role to identify regular user
         
-        header("Location: birth_registration.php"); // Redirect to home after login
+        header("Location: index.php"); // Redirect to home after login
         exit();
     } else {
         $error = "Invalid email or password";
