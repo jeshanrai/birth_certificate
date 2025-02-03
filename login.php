@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['email'] = 'admin@gmail.com';
         $_SESSION['role'] = 'admin'; // Add a role to identify admin
         
-        header("Location: verifiying.php"); // Redirect to admin page
+        header("Location: verifiying.php
+        "); // Redirect to admin page
         exit();
     }
 
