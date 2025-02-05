@@ -1,9 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'] )) {
+if (!isset($_SESSION['username'], $_SESSION['citizenship_number'])) {
     header("Location: birth_registration_login.php");
     exit;
 }
+
+$citizenship_number = $_SESSION['citizenship_number'];  // Get citizenship_number from session
 
 
 // Database connection
@@ -48,6 +50,8 @@ $birthplace_vdc = $_POST['birthplaceVDC'] ?? '';
 $birthplace_ward_no = $_POST['birthplaceWardNo'] ?? '';
 $father_name = $_POST['parentFather'] ?? '';
 $mother_name = $_POST['parentMother'] ?? '';
+$grandfather_name=$_POST['newbornGrandFather'] ?? '';
+$grandmother_name=$_POST['newbornGrandMother'] ?? '';
 $father_district = $_POST['Fatherdistrict'] ?? '';
 $mother_district = $_POST['Motherdistrict'] ?? '';
 $father_vdc = $_POST['FatherVDC'] ?? '';
@@ -96,14 +100,14 @@ $sql = "INSERT INTO registrations (
   zone, district, municipality, ward_no, registrar_name, employee_id, registration_date, 
   vdc_municipality, informant_district, full_name, dob, birth_location, birth_attendant, gender, 
   ethnicity, birth_type, physical_disability, disability_details, birthplace_district, birthplace_vdc, birthplace_ward_no, 
-  father_name, mother_name, father_district, mother_district, father_vdc, mother_vdc, father_ward_no, mother_ward_no, 
+  father_name, mother_name,grandfather_name,grandmother_name, father_district, mother_district, father_vdc, mother_vdc, father_ward_no, mother_ward_no, 
   father_street, mother_street, father_village, mother_village, father_house_no, mother_house_no, father_birthplace, 
   mother_birthplace, father_country_birth, mother_country_birth, father_nationality, mother_nationality, father_national_id, 
   mother_national_id, father_citizenship_no, mother_citizenship_no, father_citizenship_district, mother_citizenship_district, 
   father_education, mother_education, father_profession, mother_profession, father_religion, mother_religion, 
   father_mother_tongue, mother_mother_tongue, marriage_date, newborn_name, newborn_district, newborn_ward, 
-  newborn_street, newborn_village, newborn_house, citizenship_no, issued_date, issued_district
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  newborn_street, newborn_village, newborn_house, citizenship_no,citizenship_number, issued_date, issued_district
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
 // **Prepare Statement**
@@ -114,17 +118,16 @@ if (!$stmt) {
 
 // **Bind Parameters (69 total)**
 $stmt->bind_param(
-  "sssisssssssssssssssiissssssssssssssssssssssssssssssssssssssssssss", 
+  "sssisssssssssssssssssiissssssssssssssssssssssssssssssssssssssssssiss", 
   $zone, $district, $municipality, $ward_no, $registrar_name, $employee_id, $registration_date, 
   $vdc_municipality, $informant_district, $full_name, $dob, $birth_location, $birth_attendant, $gender, 
   $ethnicity, $birth_type, $physical_disability, $disability_details, $birthplace_district, $birthplace_vdc, $birthplace_ward_no, 
-  $father_name, $mother_name, $father_district, $mother_district, $father_vdc, $mother_vdc, $father_ward_no, $mother_ward_no, 
-  $father_street, $mother_street, $father_village, $mother_village, $father_house_no, $mother_house_no, $father_birthplace, 
+  $father_name, $mother_name,$grandfather_name, $grandmother_name,$father_district, $mother_district, $father_vdc, $mother_vdc, $father_ward_no, $mother_ward_no, $father_street, $mother_street, $father_village, $mother_village, $father_house_no, $mother_house_no, $father_birthplace, 
   $mother_birthplace, $father_country_birth, $mother_country_birth, $father_nationality, $mother_nationality, $father_national_id, 
   $mother_national_id, $father_citizenship_no, $mother_citizenship_no, $father_citizenship_district, $mother_citizenship_district, 
   $father_education, $mother_education, $father_profession, $mother_profession, $father_religion, $mother_religion, 
   $father_mother_tongue, $mother_mother_tongue, $marriage_date, $newborn_name, $newborn_district, $newborn_ward, 
-  $newborn_street, $newborn_village, $newborn_house, $citizenship_no, $issued_date, $issued_district
+  $newborn_street, $newborn_village, $newborn_house, $citizenship_no, $citizenship_number, $issued_date, $issued_district
 );
 
 
@@ -890,12 +893,12 @@ th {
         </div>
       </div>
       <div>
-        <h2>3. Newborn Baby's Father and Mother Details</h2>
+        <h2>3. Newborn Baby's GrandFather and GrandMother Details</h2>
         <table>
           <tr>
             <th>Details</th>
-            <th>Father's Information</th>
-            <th>Mother's Information</th>
+            <th>GrandFather's Information</th>
+            <th>GrandMother's Information</th>
           </tr>
 
           <tr>
@@ -903,15 +906,15 @@ th {
             <td>
               <input
                 type="text"
-                placeholder="Enter the Father's Information"
-                name="newbornFather" required
+                placeholder="Enter the GrandFather's Information"
+                name="newbornGrandFather" required
               />
             </td>
             <td>
               <input
                 type="text"
-                placeholder="Enter the Mother's Information"
-                name="newbornMother" required
+                placeholder="Enter the GrandMother's Information"
+                name="newbornGrandMother" required
               />
             </td>
           </tr>

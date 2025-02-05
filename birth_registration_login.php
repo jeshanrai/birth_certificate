@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli('localhost', 'root', '', 'portfolio');
+$conn = new mysqli('localhost', 'root', '', 'birth_registration');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

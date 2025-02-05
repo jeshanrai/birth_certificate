@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = new mysqli('localhost', 'root', '', 'portfolio');
+$conn = new mysqli('localhost', 'root', '', 'birth_registration');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -15,8 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['email'] = 'admin@gmail.com';
         $_SESSION['role'] = 'admin'; // Add a role to identify admin
         
-        header("Location: verifiying.php
-        "); // Redirect to admin page
+        header("Location:AdminDashboard.php "); // Redirect to admin page
         exit();
     }
 
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         h2 {
             text-align: center;
             margin-bottom: 1.5rem;
-            color: #333;
+            color: black;
         }
 
         form {
@@ -198,6 +197,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transform: scaleX(-1);
             margin-right:20px;
         }
+        .gov{
+            color:white;
+        }
     </style>
 </head>
 <body>
@@ -205,12 +207,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <img src="image/government logo.png"  class="government_logo"alt="Nepal Government Logo">
         <div class="text">
             <h1>नेपाल सरकारको आधिकारिक पोर्टल</h1>
-            <h2>The Official Portal of Government of Nepal</h2>
+            <h2 class="gov">The Official Portal of Government of Nepal</h2>
             <h3>NEPAL.GOV.NP</h3>
         </div>
         <img class="flag" src="image/flag.gif" alt="Nepal Flag">
     </div>
     <div class="container">
+        
         <h2>Login</h2>
         <form action="login.php" method="POST">
             <label for="email">Email:</label>

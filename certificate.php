@@ -1,6 +1,31 @@
+
+
 <?php
 session_start();
-?>v
+if (!isset($_SESSION['citizenship_number'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "birth_registration";
+
+$conn = new mysqli($servername, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$citizenship_number = $_SESSION['citizenship_number'];
+$query = "SELECT * FROM status WHERE citizenship_number = ? ORDER BY registration_date DESC";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $citizenship_number);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,6 +150,42 @@ session_start();
     filter: brightness(0) invert(1); /* Ensures the icon appears white */
 }
 
+.download{
+    margin-top:400px;
+}
+.certificate-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        .status {
+            font-weight: bold;
+        }
+        .buttons {
+            margin-top: 10px;
+        }
+        button {
+            background-color: #3EB2FD;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004b87;
+        }
+        .pending {
+            color: orange;
+        }
+        .verified {
+            color: green;
+        }
+        .verified_certificate{
+            margin-top:180px;
+        }
     </style>
 </head>
 <body>
@@ -159,5 +220,45 @@ session_start();
         <?php endif; ?>
     </div>
     </div>
+        <h1 class="verified_certificate">Verified Certificates</h1>
+
+        <?php
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<div class='certificate-container'>";
+        echo "<p><strong>Newborn Name:</strong> " . htmlspecialchars($row['newborn_name']) . "</p>";
+        echo "<p><strong>Registration Date:</strong> " . htmlspecialchars($row['registration_date']) . "</p>";
+        echo "<p class='status'><strong>Status:</strong> ";
+
+        if ($row['status_details'] === 'verified') {
+            echo "<span class='verified'>Verified</span></p>";
+            echo "<div class='buttons'>";
+            // View Certificate Button
+            // View Certificate Button
+echo "<form action='formprint.php' method='GET' target='_blank' style='display:inline;'>
+<input type='hidden' name='id' value='" . htmlspecialchars($row['registration_id']) . "'>
+<button type='submit'>View Certificate</button>
+</form>";
+
+            // Download Certificate Button
+            echo "<form action='generate_pdf.php' method='GET' style='display:inline;'>
+                    <input type='hidden' name='id' value='" . htmlspecialchars($row['registration_id']) . "'>
+                    <button type='submit'>Download Certificate</button>
+                  </form>";
+            echo "</div>";
+        } elseif ($row['status_details'] === 'pending') {
+            echo "<span class='pending'>Pending</span></p>";
+        }
+
+        echo "</div>";
+    }
+} else {
+    echo "<p>No certificates found for your citizenship number.</p>";
+}
+
+$stmt->close();
+$conn->close();
+?>
+
 </body>
 </html>
