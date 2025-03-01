@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="header">
-        <img src="image/government logo.png"  class="government_logo"alt="Nepal Government Logo">
+        <img src="image/government_logo.png"  class="government_logo"alt="Nepal Government Logo">
         <div class="text">
             <h1>नेपाल सरकारको आधिकारिक पोर्टल</h1>
             <h2 class="gov">The Official Portal of Government of Nepal</h2>

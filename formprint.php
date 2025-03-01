@@ -122,7 +122,7 @@ margin-left:100px;
   <?php if ($row): ?>
   <div class="certificate-container">
     <div class="header">
-      <img src="image/government logo.png" alt="Nepal Government Logo" />
+      <img src="image/government_logo.png" alt="Nepal Government Logo" />
       <h1>Government of Nepal</h1>
       <h2>Ministry of Federal Affairs and Local Development</h2>
       <h3>Ward No. <?php echo htmlspecialchars($row['ward_no']); ?></h3>

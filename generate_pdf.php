@@ -15,6 +15,25 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Convert logo image to Base64
+$logoPath = __DIR__ . "/image/government_logo.png"; // Adjust path if necessary
+if (file_exists($logoPath)) {
+    $logoBase64 = base64_encode(file_get_contents($logoPath));
+    $logoSrc = 'data:image/png;base64,' . $logoBase64;
+} else {
+    $logoSrc = ''; // Fallback if the image is missing
+}
+
+// Convert signature image to Base64
+$signaturePath = __DIR__ . "/image/signature.jpg"; // Adjust path if necessary
+if (file_exists($signaturePath)) {
+    $signatureBase64 = base64_encode(file_get_contents($signaturePath));
+    $signatureSrc = 'data:image/jpeg;base64,' . $signatureBase64;
+} else {
+    $signatureSrc = ''; // Fallback if the image is missing
+}
+
+
 // Get the registration ID from the GET request
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $registration_id = $_GET['id'];
@@ -44,16 +63,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 body { font-family: "Roboto", sans-serif; background-color: #fff; }
                 .certificate-container { padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
                 .header { text-align: center; }
-                .header img { width: 80px; }
+                img { width: 80px; }
                 .certificate-content { line-height: 1.8; font-size: 16px; }
-                .signature-section { margin-top: 40px; text-align: right; }
-                .signature img { width: 150px; }
+                .signature-section { margin-top: 60px; text-align: right; }
+                .signature img { width: 250px; }
             </style>
         </head>
         <body>
             <div class="certificate-container">
                 <div class="header">
-                    <img src="image/government_logo.png" alt="Nepal Government Logo">
+                    <img src="' . $logoSrc . '" alt="Nepal Government Logo">
+
                     <h1>Government of Nepal</h1>
                     <h2>Ministry of Federal Affairs and Local Development</h2>
                     <h3>Ward No. ' . htmlspecialchars($row['ward_no']) . '</h3>
@@ -74,7 +94,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     </p>
                 </div>
                 <div class="signature-section">
-                    <img src="image/signature.jpg" alt="Signature">
+                    <img src="' . $signatureSrc . '" alt="Signature">
                     <p><strong>Name:</strong> Jeshan Rai</p>
                     <p><strong>Designation:</strong> Nagar Pramukh</p>
                 </div>
